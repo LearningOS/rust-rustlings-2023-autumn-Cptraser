@@ -39,50 +39,53 @@ fn build_scores_table(results: String) -> HashMap<String, Team> {
         // will be the number of goals conceded from team_2, and similarly
         // goals scored by team_2 will be the number of goals conceded by
         // team_1.
-        if scores.contains_key(&team_1_name) {
-            let mut s1 = 0;
-            let mut s2 = 0;
-            let p = scores.get(&team_1_name);
-            match p {
-                Some(p) => {
-                    s1 = p.goals_scored;
-                    s2 = p.goals_conceded;
-                }
-                None => panic!("Find Fault!"),
-            }
-            scores.insert(team_1_name, Team{
-                goals_scored: team_1_score + s1,
-                goals_conceded: team_2_score + s2,
-            });
-        } else {
-            scores.insert(team_1_name, Team{
-                goals_scored: team_1_score,
-                goals_conceded: team_2_score,
-            });
-        }
+        // if scores.contains_key(&team_1_name) {
+        //     let mut s1 = 0;
+        //     let mut s2 = 0;
+        //     let p = scores.get(&team_1_name);
+        //     match p {
+        //         Some(p) => {
+        //             s1 = p.goals_scored;
+        //             s2 = p.goals_conceded;
+        //         }
+        //         None => panic!("Find Fault!"),
+        //     }
+        //     scores.insert(team_1_name, Team{
+        //         goals_scored: team_1_score + s1,
+        //         goals_conceded: team_2_score + s2,
+        //     });
+        // } else {
+        //     scores.insert(team_1_name, Team{
+        //         goals_scored: team_1_score,
+        //         goals_conceded: team_2_score,
+        //     });
+        // }
         
-        if scores.contains_key(&team_2_name) {
-            let mut s1 = 0;
-            let mut s2 = 0;
-            let p = scores.get(&team_2_name);
-            match p {
-                Some(p) => {
-                    s1 = p.goals_scored;
-                    s2 = p.goals_conceded;
-                }
-                None => panic!("Find Fault!"),
-            }
-            scores.insert(team_2_name, Team{
-                goals_scored: team_2_score + s1,
-                goals_conceded: team_1_score + s2,
-            });
-        } else {
-            scores.insert(team_2_name, Team{
-                goals_scored: team_2_score,
-                goals_conceded: team_1_score,
-            });
-        }
-
+        // if scores.contains_key(&team_2_name) {
+        //     let mut s1 = 0;
+        //     let mut s2 = 0;
+        //     let p = scores.get(&team_2_name);
+        //     match p {
+        //         Some(p) => {
+        //             s1 = p.goals_scored;
+        //             s2 = p.goals_conceded;
+        //         }
+        //         None => panic!("Find Fault!"),
+        //     }
+        //     scores.insert(team_2_name, Team{
+        //         goals_scored: team_2_score + s1,
+        //         goals_conceded: team_1_score + s2,
+        //     });
+        // } else {
+        //     scores.insert(team_2_name, Team{
+        //         goals_scored: team_2_score,
+        //         goals_conceded: team_1_score,
+        //     });
+        // }
+        let team = scores.entry(team_1_name).or_insert(Team{ goals_scored: 0, goals_conceded: 0 });
+        *team = Team{ goals_scored: team.goals_scored + team_1_score, goals_conceded: team.goals_conceded + team_2_score };
+        let team = scores.entry(team_2_name).or_insert(Team{ goals_scored: 0, goals_conceded: 0 });
+        *team = Team{ goals_scored: team.goals_scored + team_2_score, goals_conceded: team.goals_conceded + team_1_score };
     }
     scores
 }
